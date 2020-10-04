@@ -7,3 +7,7 @@ title = "CSAPP Notes"
 
 [output.html]
 mathjax-support = true
+
+[build]
+build-dir = "docs"
+create-missing = false

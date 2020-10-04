@@ -1,0 +1,699 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Chapter 3 - CSAPP Notes</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> Chapter 1</a></li><li class="chapter-item expanded "><a href="chapter_2.html"><strong aria-hidden="true">2.</strong> Chapter 2</a></li><li class="chapter-item expanded "><a href="chapter_3.html" class="active"><strong aria-hidden="true">3.</strong> Chapter 3</a></li><li class="chapter-item expanded "><a href="chapter_4.html"><strong aria-hidden="true">4.</strong> Chapter 4</a></li><li class="chapter-item expanded "><a href="chapter_5.html"><strong aria-hidden="true">5.</strong> Chapter 5</a></li><li class="chapter-item expanded "><a href="chapter_6.html"><strong aria-hidden="true">6.</strong> Chapter 6</a></li><li class="chapter-item expanded "><a href="chapter_7.html"><strong aria-hidden="true">7.</strong> Chapter 7</a></li><li class="chapter-item expanded "><a href="chapter_8.html"><strong aria-hidden="true">8.</strong> Chapter 8</a></li><li class="chapter-item expanded "><a href="chapter_9.html"><strong aria-hidden="true">9.</strong> Chapter 9</a></li><li class="chapter-item expanded "><a href="chapter_10.html"><strong aria-hidden="true">10.</strong> Chapter 10</a></li><li class="chapter-item expanded "><a href="chapter_11.html"><strong aria-hidden="true">11.</strong> Chapter 11</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">CSAPP Notes</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#machine-level-representation-of-programs" id="machine-level-representation-of-programs">Machine-Level Representation of Programs</a></h1>
+<blockquote>
+<p>With modern optimizing compilers, the generated code is usually at least as efficient as what a skilled assembly-language programmer would write by hand.</p>
+</blockquote>
+<h2><a class="header" href="#a-historical-perspective" id="a-historical-perspective">A Historical Perspective</a></h2>
+<pre><code>|-------------------------------------------------------------------------------------|
+|processor       | features                                                           |
+|----------------|--------------------------------------------------------------------|
+| 8086           |1978. single-chip, 16bit. 8087 supprts fp                           |
+|----------------|--------------------------------------------------------------------|
+| 80286          |1982. more (obsolete) addressing mode. form basis of IBM PC-AT      |
+|----------------|--------------------------------------------------------------------|
+| i386           |1985. 32bit. flat addressing model. fully support UNIX              |
+|----------------|--------------------------------------------------------------------|
+| i486           |1989. improved performance, fp supports                             |
+|----------------|--------------------------------------------------------------------|
+| Pentium        |1993. improved performance                                          |
+|----------------|--------------------------------------------------------------------|
+|PentiumPro      |1995. P6 microarchitecture. &quot;conditional move&quot; instructions         |
+|----------------|--------------------------------------------------------------------|
+|Pentium/MMX     |1997. integer vector instructions (&lt;=64bit)                         |
+|----------------|--------------------------------------------------------------------|
+|Pentium II      |1997. improved P6                                                   |
+|----------------|--------------------------------------------------------------------|
+|Pentium III     |1999. SSE (integer/fp vector, &lt;=128bit); integrate level-2 cache    |
+|----------------|--------------------------------------------------------------------|
+|Pentium 4       |2000. SSE2 (double fp) with 144 new instructions                    |
+|----------------|--------------------------------------------------------------------|
+|Pentium 4E      |2004. hyperthreading. EM64T                                         |
+|----------------|--------------------------------------------------------------------|
+|Core 2          |2006. P6-like microarchitecture. multi-core w/o hyperthreading      |
+|----------------|--------------------------------------------------------------------|
+|i7,Nehalem      |2008. combine multi-core &amp; hyperthreading; 2progs/core; 4cores/chip |
+|----------------|--------------------------------------------------------------------|
+|i7,Sandy Bridge |2011. AVX(extension to SSE, &lt;=256bit)                               |
+|----------------|--------------------------------------------------------------------|
+|i7,Haswell      |2013. AVX2                                                          |
+|----------------|--------------------------------------------------------------------|
+</code></pre>
+<h2><a class="header" href="#program-encodings" id="program-encodings">Program Encodings</a></h2>
+<p>Process states:</p>
+<ul>
+<li>program counter(PC): <code>%rip</code> in x86-64</li>
+<li>integer register file: 16 named locations storing 64bit addresses/integers</li>
+<li>condition code registers: most recently executed arithmetic/logic instruction</li>
+<li>vector registers: integers/fps</li>
+</ul>
+<h4><a class="header" href="#for-x86-64-integer-registers-usage-conventions-are" id="for-x86-64-integer-registers-usage-conventions-are">For x86-64 integer registers, usage conventions are:</a></h4>
+<ul>
+<li>Return value (<code>rax</code>, <code>eax</code>, <code>ax</code>, <code>al</code>)</li>
+<li>Callee saved (<code>rbx</code>, <code>ebx</code>, <code>bx</code>, <code>bl</code>)</li>
+<li>4th argument (<code>rcx</code>, <code>ecx</code>, <code>cx</code>, <code>cl</code>)</li>
+<li>3rd argument (<code>rdx</code>, <code>edx</code>, <code>dx</code>, <code>dl</code>)</li>
+<li>2nd argument (<code>rsi</code>, <code>esi</code>, <code>si</code>, <code>sil</code>)</li>
+<li>1st argument (<code>rdi</code>, <code>edi</code>, <code>di</code>, <code>dil</code>)</li>
+<li>Callee saved (<code>rbp</code>, <code>ebp</code>, <code>bp</code>, <code>bpl</code>)</li>
+<li>Stack pointer (<code>rsp</code>, <code>esp</code>, <code>sp</code>, <code>spl</code>)</li>
+<li>5th argument (<code>r8</code>, <code>r8d</code>, <code>r8w</code>, <code>r8b</code>)</li>
+<li>6th argument (<code>r9</code>, <code>r9d</code>, <code>r9w</code>, <code>r9b</code>)</li>
+<li>Caller saved (<code>r10</code>, <code>r10d</code>, <code>r10w</code>, <code>r10b</code>)</li>
+<li>Caller saved (<code>r11</code>, <code>r11d</code>, <code>r11w</code>, <code>r11b</code>)</li>
+<li>Callee saved (<code>r12</code>, <code>r12d</code>, <code>r12w</code>, <code>r12b</code>)</li>
+<li>Callee saved (<code>r13</code>, <code>r13d</code>, <code>r13w</code>, <code>r13b</code>)</li>
+<li>Callee saved (<code>r14</code>, <code>r14d</code>, <code>r14w</code>, <code>r14b</code>)</li>
+<li>Callee saved (<code>r15</code>, <code>r15d</code>, <code>r15w</code>, <code>r15b</code>)</li>
+</ul>
+<h4><a class="header" href="#current-x86-64-machines-upper-16bits-are-all-zero----virtual-address-range-0248" id="current-x86-64-machines-upper-16bits-are-all-zero----virtual-address-range-0248">Current x86-64 machines, upper 16bits are ALL zero -- virtual address range: [0,\(2^{48}\)].</a></h4>
+<pre><code class="language-c">// mstore.c
+long mult2(long, long);
+void multstore(long x, long y, long *dest) {
+    long t = mult2(x, y);
+    *dest = t;
+}
+</code></pre>
+<pre><code class="language-C">// gcc -Og -S mstore.c -o mstore_gcc_O0.s
+	.file	&quot;mstore.c&quot;
+	.text
+	.globl	multstore
+	.type	multstore, @function
+multstore:
+.LFB0:
+	.cfi_startproc
+	endbr64                      # -- https://stackoverflow.com/a/56910435/528929
+	pushq	%rbx
+	.cfi_def_cfa_offset 16
+	.cfi_offset 3, -16
+	movq	%rdx, %rbx
+	call	mult2@PLT
+	movq	%rax, (%rbx)
+	popq	%rbx
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	multstore, .-multstore
+	.ident	&quot;GCC: (Ubuntu 9.3.0-10ubuntu2) 9.3.0&quot;
+	.section	.note.GNU-stack,&quot;&quot;,@progbits
+	.section	.note.gnu.property,&quot;a&quot;
+	.align 8
+	.long	 1f - 0f
+	.long	 4f - 1f
+	.long	 5
+0:
+	.string	 &quot;GNU&quot;
+1:
+	.align 8
+	.long	 0xc0000002
+	.long	 3f - 2f
+2:
+	.long	 0x3
+3:
+	.align 8
+4:
+</code></pre>
+<pre><code class="language-C">// clang -Og -S mstore.c -o mstore_clang_O0.s
+	.text
+	.file	&quot;mstore.c&quot;
+	.globl	multstore               # -- Begin function multstore
+	.p2align	4, 0x90
+	.type	multstore,@function
+multstore:                              # @multstore
+	.cfi_startproc
+# %bb.0:
+	pushq	%rbx
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbx, -16
+	movq	%rdx, %rbx
+	callq	mult2
+	movq	%rax, (%rbx)
+	popq	%rbx
+	.cfi_def_cfa_offset 8
+	retq
+.Lfunc_end0:
+	.size	multstore, .Lfunc_end0-multstore
+	.cfi_endproc
+                                        # -- End function
+
+	.ident	&quot;clang version 8.0.1-9 (tags/RELEASE_801/final)&quot;
+	.section	&quot;.note.GNU-stack&quot;,&quot;&quot;,@progbits
+	.addrsig
+</code></pre>
+<pre><code class="language-C">// gcc -Og -c mstore.c -o mstore_gcc_O0.o
+// objdump -d mstore_gcc_O0.o &gt; mstore_gcc_O0.objdump
+
+mstore_gcc_O0.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 &lt;multstore&gt;:
+   0:	f3 0f 1e fa          	endbr64 
+   4:	53                   	push   %rbx
+   5:	48 89 d3             	mov    %rdx,%rbx
+   8:	e8 00 00 00 00       	callq  d &lt;multstore+0xd&gt;
+   d:	48 89 03             	mov    %rax,(%rbx)
+  10:	5b                   	pop    %rbx
+  11:	c3                   	retq   
+</code></pre>
+<pre><code class="language-C">// clang -Og -emit-llvm -S mstore.c -o mstore_clang_O0.ll
+; ModuleID = 'mstore.c'
+source_filename = &quot;mstore.c&quot;
+target datalayout = &quot;e-m:e-i64:64-f80:128-n8:16:32:64-S128&quot;
+target triple = &quot;x86_64-pc-linux-gnu&quot;
+
+; Function Attrs: nounwind uwtable
+define dso_local void @multstore(i64, i64, i64* nocapture) local_unnamed_addr #0 {
+  %4 = tail call i64 @mult2(i64 %0, i64 %1) #2
+  store i64 %4, i64* %2, align 8, !tbaa !2
+  ret void
+}
+
+declare dso_local i64 @mult2(i64, i64) local_unnamed_addr #1
+
+attributes #0 = { nounwind uwtable &quot;correctly-rounded-divide-sqrt-fp-math&quot;=&quot;false&quot; &quot;disable-tail-calls&quot;=&quot;false&quot; &quot;less-precise-fpmad&quot;=&quot;false&quot; &quot;min-legal-vector-width&quot;=&quot;0&quot; &quot;no-frame-pointer-elim&quot;=&quot;false&quot; &quot;no-infs-fp-math&quot;=&quot;false&quot; &quot;no-jump-tables&quot;=&quot;false&quot; &quot;no-nans-fp-math&quot;=&quot;false&quot; &quot;no-signed-zeros-fp-math&quot;=&quot;false&quot; &quot;no-trapping-math&quot;=&quot;false&quot; &quot;stack-protector-buffer-size&quot;=&quot;8&quot; &quot;target-cpu&quot;=&quot;x86-64&quot; &quot;target-features&quot;=&quot;+fxsr,+mmx,+sse,+sse2,+x87&quot; &quot;unsafe-fp-math&quot;=&quot;false&quot; &quot;use-soft-float&quot;=&quot;false&quot; }
+attributes #1 = { &quot;correctly-rounded-divide-sqrt-fp-math&quot;=&quot;false&quot; &quot;disable-tail-calls&quot;=&quot;false&quot; &quot;less-precise-fpmad&quot;=&quot;false&quot; &quot;no-frame-pointer-elim&quot;=&quot;false&quot; &quot;no-infs-fp-math&quot;=&quot;false&quot; &quot;no-nans-fp-math&quot;=&quot;false&quot; &quot;no-signed-zeros-fp-math&quot;=&quot;false&quot; &quot;no-trapping-math&quot;=&quot;false&quot; &quot;stack-protector-buffer-size&quot;=&quot;8&quot; &quot;target-cpu&quot;=&quot;x86-64&quot; &quot;target-features&quot;=&quot;+fxsr,+mmx,+sse,+sse2,+x87&quot; &quot;unsafe-fp-math&quot;=&quot;false&quot; &quot;use-soft-float&quot;=&quot;false&quot; }
+attributes #2 = { nounwind }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !&quot;wchar_size&quot;, i32 4}
+!1 = !{!&quot;clang version 8.0.1-9 (tags/RELEASE_801/final)&quot;}
+!2 = !{!3, !3, i64 0}
+!3 = !{!&quot;long&quot;, !4, i64 0}
+!4 = !{!&quot;omnipotent char&quot;, !5, i64 0}
+!5 = !{!&quot;Simple C/C++ TBAA&quot;}
+</code></pre>
+<h2><a class="header" href="#data-formats" id="data-formats">Data Formats</a></h2>
+<pre><code>// size of data types in x86-64
+---------------------------------------------------------------
+C types     Inel types        Assembly suffixes       Bytes
+---------------------------------------------------------------
+char        byte                      b                 1
+short       word                      w                 2
+int         double word               l                 4
+long        quad word                 q                 8
+char *      quad word                 q                 8
+            oct word                                   16
+float       single precision          s                 4
+double      double precision          l                 8
+---------------------------------------------------------------
+</code></pre>
+<h2><a class="header" href="#accessing-information" id="accessing-information">Accessing Information</a></h2>
+<table><thead><tr><th>type</th><th>Form</th><th>Operand value</th><th>Name</th></tr></thead><tbody>
+<tr><td>Immediate</td><td>\($Imm\)</td><td>\(Imm\)</td><td>Immediate</td></tr>
+<tr><td>Register</td><td>\(r_a\)</td><td>\(R[r_a]\)</td><td>Register</td></tr>
+<tr><td>Memory</td><td>\(Imm\)</td><td>\(M[Imm]\)</td><td>Absolute</td></tr>
+<tr><td>Memory</td><td>\((r_a)\)</td><td>\(M[R[r_a]]\)</td><td>Indirect</td></tr>
+<tr><td>Memory</td><td>\(Imm(r_b)\)</td><td>\(M[Imm+R[r_b]]\)</td><td>Base+displacement</td></tr>
+<tr><td>Memory</td><td>\((r_b, r_i)\)</td><td>\(M[R[r_b]+R[r_i]\)</td><td>Indexed</td></tr>
+<tr><td>Memory</td><td>\(Imm(r_b, r_i)\)</td><td>\(M[Imm+R[r_b]+R[r_i]\)</td><td>Indexed</td></tr>
+<tr><td>Memory</td><td>\((,r_i, s)\)</td><td>\(M[R[r_i]\cdot s]\)</td><td>Scaled Indexed</td></tr>
+<tr><td>Memory</td><td>\(Imm(,r_i, s)\)</td><td>\(M[Imm+R[r_i]\cdot s]\)</td><td>Scaled Indexed</td></tr>
+<tr><td>Memory</td><td>\((r_b,r_i, s)\)</td><td>\(M[R[r_b]+R[r_i]\cdot s]\)</td><td>Scaled Indexed</td></tr>
+<tr><td>Memory</td><td>\(Imm(r_b,r_i, s)\)</td><td>\(M[Imm+R[r_b]+R[r_i]\cdot s]\)</td><td>Scaled Indexed</td></tr>
+</tbody></table>
+<h4><a class="header" href="#push-and-pop" id="push-and-pop">Push and Pop</a></h4>
+<ul>
+<li><code>pushq S</code>(<code>S</code> can be a register value like <code>%rbp</code>): increase stack (\(R[\%rsp]\leftarrow R[\%rsp]-8\) for x86-64, <code>sub $8,%rsp</code>) and store the value <code>S</code> into the memory pointed by the stack register (\(M[R[\%rsp]]\leftarrow S\), <code>movq %rbp, %rsp</code>)</li>
+<li><code>popq D</code> (<code>D</code> can be a regiser value like <code>%rax</code>): store the stack pointer pointed value in memory to <code>D</code> (\(D\leftarrow M[R[\%rsp]]\), <code>movq (%rsp),%rax</code>) and decrease stack (\(R[\%rsp]\leftarrow R[\%rsp]+8\), <code>addq $8,%rsp</code>)</li>
+</ul>
+<h4><a class="header" href="#arithmetic-and-logical-operations" id="arithmetic-and-logical-operations">Arithmetic and Logical Operations</a></h4>
+<ul>
+<li><code>leaq</code> can perform simple <code>add</code> or <code>mul</code> operations</li>
+<li>two's-component arithmetic is the preferred for signed integer arithmetic</li>
+<li>Special arithmetic operations can be implemented with corperations of several registers</li>
+</ul>
+<pre><code class="language-C">// scale.c
+long scale(long x, long y, long z) {
+    long t = x + 4 * y + 12 * z;
+    return t;
+}
+
+// scale.s
+	.file	&quot;scale.c&quot;
+	.text
+	.globl	scale
+	.type	scale, @function
+scale:
+.LFB0:
+	.cfi_startproc
+	endbr64
+	leaq	(%rdi,%rsi,4), %rax
+	leaq	(%rdx,%rdx,2), %rdx
+	leaq	(%rax,%rdx,4), %rax
+	ret
+	.cfi_endproc
+</code></pre>
+<pre><code class="language-C">// store_uprod.c
+#include &lt;inttypes.h&gt;
+
+typedef unsigned __int128 uint128_t;
+
+void store_uprod(uint128_t *dest, uint64_t x, uint64_t y) {
+    *dest = x * (uint128_t) y;
+}
+
+// store_uprod.s
+	.file	&quot;store_uprod.c&quot;
+	.text
+	.globl	store_uprod
+	.type	store_uprod, @function
+store_uprod:
+.LFB4:
+	.cfi_startproc
+	endbr64
+	movq	%rsi, %rax    # -- arg2 to %rax 
+	mulq	%rdx          # -- unsigned multiply of %rax by %rdx(arg3), results to %rdx:%rax 
+	movq	%rax, (%rdi)  # -- low bits to %rdi(low arg1)
+	movq	%rdx, 8(%rdi) # -- high bits to %rdi+8(high arg2)
+	ret
+	.cfi_endproc
+</code></pre>
+<pre><code class="language-C">// remdiv.c
+void remdiv(long x, long y, long *qp, long *rp) {
+    long q = x/y;
+    long r = x%y;
+    *qp = q;
+    *rp = r;
+}
+// x in %rdi, y in %rsi, qp in %rdx, rp in %rcx
+
+// remdiv.s
+	.text
+	.file	&quot;remdiv.c&quot;
+	.globl	remdiv                  # -- Begin function remdiv
+	.p2align	4, 0x90
+	.type	remdiv,@function
+remdiv:                                 # @remdiv
+	.cfi_startproc
+# %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	movq	%rdi, -8(%rbp)
+	movq	%rsi, -16(%rbp)
+	movq	%rdx, -24(%rbp)
+	movq	%rcx, -32(%rbp)
+	movq	-8(%rbp), %rax
+	cqto
+	idivq	-16(%rbp)
+	movq	%rax, -40(%rbp)
+	movq	-8(%rbp), %rax
+	cqto
+	idivq	-16(%rbp)
+	movq	%rdx, -48(%rbp)
+	movq	-40(%rbp), %rcx
+	movq	-24(%rbp), %rdx
+	movq	%rcx, (%rdx)
+	movq	-48(%rbp), %rcx
+	movq	-32(%rbp), %rdx
+	movq	%rcx, (%rdx)
+	popq	%rbp
+	.cfi_def_cfa %rsp, 8
+	retq
+.Lfunc_end0:
+	.size	remdiv, .Lfunc_end0-remdiv
+	.cfi_endproc
+                                        # -- End function
+
+	.ident	&quot;clang version 8.0.1-9 (tags/RELEASE_801/final)&quot;
+	.section	&quot;.note.GNU-stack&quot;,&quot;&quot;,@progbits
+	.addrsig
+</code></pre>
+<h2><a class="header" href="#control" id="control">Control</a></h2>
+<h4><a class="header" href="#control-codes-condition-code-registerflag-register" id="control-codes-condition-code-registerflag-register">Control Codes (condition code register/FLAG register)</a></h4>
+<ul>
+<li>Flags
+<ul>
+<li><code>CF</code>: carry flag, overflow for unsigned operations</li>
+<li><code>ZF</code>: zero flag</li>
+<li><code>SF</code>: sign flag</li>
+<li><code>OF</code>: overflow flag, overflow for two-complement's operations</li>
+</ul>
+</li>
+<li>instructions
+<ul>
+<li>cmp S1, S2 (<code>S2 - S1</code>), <code>sub</code> w/o updating destinations</li>
+<li>test S1, S2 (<code>s1 &amp; s2</code>), <code>and</code> w/o updating destinations. two same operands;  one masking</li>
+<li>set D</li>
+<li>jump Label/*Operand</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-C">// comp.c
+int comp(int a, int b) {
+    return a &lt; b;
+}
+
+// comp.s
+	.file	&quot;comp.c&quot;
+	.text
+	.globl	comp
+	.type	comp, @function
+comp:
+.LFB0:
+	.cfi_startproc
+	endbr64
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	movl	%edi, -4(%rbp)
+	movl	%esi, -8(%rbp)
+	movl	-4(%rbp), %eax
+	cmpl	-8(%rbp), %eax
+	setl	%al
+	movzbl	%al, %eax
+	popq	%rbp
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+</code></pre>
+<pre><code>// jump instructions
+|---------------------------------------------------------------------------|
+| Instruction | Synonym  | Jump condition | Description                     |
+|---------------------------------------------------------------------------|
+
+// conditional move instructions
+|---------------------------------------------------------------------------|
+| Instruction | Synonym  | Move condition | Description                     |
+|---------------------------------------------------------------------------|
+</code></pre>
+<h4><a class="header" href="#c-constructs" id="c-constructs">C constructs</a></h4>
+<ul>
+<li>Loops
+<ul>
+<li>do-while</li>
+<li>while</li>
+<li>for</li>
+</ul>
+</li>
+<li>switch</li>
+</ul>
+<h2><a class="header" href="#procedures" id="procedures">Procedures</a></h2>
+<p><code>P \rightarrow Q</code>, actions to be done</p>
+<ul>
+<li>pass control: program counter (<code>rsp</code>); runtime stack
+<ul>
+<li><code>call Label</code>, <code>call *Operand</code>, <code>ret</code></li>
+</ul>
+</li>
+<li>pass data: parameters, returns
+<ul>
+<li>args: <code>rdi</code>, <code>rsi</code>, <code>rdx</code>, <code>rcx</code>, ...</li>
+<li>callee-saved: <code>rbx</code>, <code>rbp</code>, <code>r13</code>, <code>r14</code>, <code>r15</code> (<code>Q</code> should preserve)</li>
+<li>caller-saved: <code>r10</code>, <code>r11</code>, <code>r12</code> (can be modified by any function)</li>
+</ul>
+</li>
+<li>allocate&amp;deallocate memory: for local variables (on stack)
+<ul>
+<li>some local data must be stored in memory
+<ul>
+<li>not enough registers</li>
+<li>need to generate an address for <code>&amp;</code></li>
+<li>access arrays/structs</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#array-allocation-and-access" id="array-allocation-and-access">Array Allocation and Access</a></h2>
+<pre><code>|---------------------------------------------------------------------------|
+| Expression | Type  | Value | Assembly code                                |
+|---------------------------------------------------------------------------|
+</code></pre>
+<h2><a class="header" href="#heterogeneous-data-structures" id="heterogeneous-data-structures">Heterogeneous Data Structures</a></h2>
+<p>Representation:</p>
+<ul>
+<li>structs</li>
+<li>union</li>
+<li>alignment
+<ul>
+<li>improves efficiency</li>
+<li>program correctness (SSE instructions)</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#combining-control-and-data-in-machine-level-programs" id="combining-control-and-data-in-machine-level-programs">Combining Control and Data in Machine-Level Programs</a></h2>
+<ul>
+<li>See <a href="chapter_3/GDB_CheatSheet.pdf">GDB cheatsheet</a></li>
+<li>buffer-overflow</li>
+</ul>
+<h2><a class="header" href="#floating-point-code" id="floating-point-code">Floating-Point Code</a></h2>
+<h4><a class="header" href="#others" id="others">others</a></h4>
+<ul>
+<li>thanks to branch prediction logic, code based on conditional data transfers can outperform code based on conditional control transfers</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="chapter_2.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="chapter_4.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="chapter_2.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="chapter_4.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3000/__livereload");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
