@@ -69,28 +69,28 @@ Process states:
 
 ```c
 // mstore.c
-{{#include chapter_3/mstore.c}}
+{{#include chapter_03/mstore.c}}
 ```
 
 ```C
 // gcc -Og -S mstore.c -o mstore_gcc_O0.s
-{{#include chapter_3/mstore_gcc_O0.s}}
+{{#include chapter_03/mstore_gcc_O0.s}}
 ```
 
 ```C
 // clang -Og -S mstore.c -o mstore_clang_O0.s
-{{#include chapter_3/mstore_clang_O0.s}}
+{{#include chapter_03/mstore_clang_O0.s}}
 ```
 
 ```C
 // gcc -Og -c mstore.c -o mstore_gcc_O0.o
 // objdump -d mstore_gcc_O0.o > mstore_gcc_O0.objdump
-{{#include chapter_3/mstore_gcc_O0.objdump}}
+{{#include chapter_03/mstore_gcc_O0.objdump}}
 ```
 
 ```C
 // clang -Og -emit-llvm -S mstore.c -o mstore_clang_O0.ll
-{{#include chapter_3/mstore_clang_O0.ll}}
+{{#include chapter_03/mstore_clang_O0.ll}}
 ```
 
 ## Data Formats
@@ -137,26 +137,26 @@ double      double precision          l                 8
 * Special arithmetic operations can be implemented with corperations of several registers
 ```C
 // scale.c
-{{#include chapter_3/scale.c}}
+{{#include chapter_03/scale.c}}
 
 // scale.s
-{{#include chapter_3/scale.s}}
+{{#include chapter_03/scale.s}}
 ```
 
 ```C
 // store_uprod.c
-{{#include chapter_3/store_uprod.c}}
+{{#include chapter_03/store_uprod.c}}
 
 // store_uprod.s
-{{#include chapter_3/store_uprod.s}}
+{{#include chapter_03/store_uprod.s}}
 ```
 
 ```C
 // remdiv.c
-{{#include chapter_3/remdiv.c}}
+{{#include chapter_03/remdiv.c}}
 
 // remdiv.s
-{{#include chapter_3/remdiv.s}}
+{{#include chapter_03/remdiv.s}}
 ```
 
 ## Control
@@ -175,10 +175,10 @@ double      double precision          l                 8
 
 ```C
 // comp.c
-{{#include chapter_3/comp.c}}
+{{#include chapter_03/comp.c}}
 
 // comp.s
-{{#include chapter_3/comp.s}}
+{{#include chapter_03/comp.s}}
 ```
 
 ```
@@ -230,7 +230,7 @@ Representation:
   * program correctness (SSE instructions)
 
 ## Combining Control and Data in Machine-Level Programs
-* See [GDB cheatsheet](chapter_3/GDB_CheatSheet.pdf)
+* See [GDB cheatsheet](chapter_03/GDB_CheatSheet.pdf)
 * buffer-overflow
 
 ## Floating-Point Code
