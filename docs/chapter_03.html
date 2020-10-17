@@ -609,10 +609,84 @@ comp:
 <li>buffer-overflow</li>
 </ul>
 <h2><a class="header" href="#floating-point-code" id="floating-point-code">Floating-Point Code</a></h2>
-<h4><a class="header" href="#others" id="others">others</a></h4>
+<h2><a class="header" href="#others" id="others">OTHERS</a></h2>
 <ul>
-<li>thanks to branch prediction logic, code based on conditional data transfers can outperform code based on conditional control transfers</li>
+<li>owing to branch prediction logic, code based on conditional data transfers can outperform code based on conditional control transfers</li>
+<li>C/C++/Rust can facilitate builtin functions/attributes to change the branches.
+<ul>
+<li>C/C++: <code>long __builtin_expect (long exp, long c)</code></li>
+<li>C++20: <code>[[likely]]</code>/<code>[[likely]]</code></li>
+<li>Rust(nightly-only): <code>std::intrinsics::likely</code>/<code>std::intrinsics::unlikely</code></li>
 </ul>
+</li>
+</ul>
+<pre><code class="language-C">/// likely_unlikely.c
+#include &quot;stdio.h&quot;
+#include &quot;time.h&quot;
+
+int main() {
+    /* Use time to prevent it from being optimized away. */
+    int i = !time(NULL);
+    // if (__builtin_expect(i, 0))
+    if (i)
+        printf(&quot;%d\n&quot;, i);
+    puts(&quot;a&quot;);
+    return 0;
+}
+
+/// clang -O3 likely_unlikely.c -S
+/// due to __builtin_expect, the order of `_printf` and `_puts` is reversed
+	.section	__TEXT,__text,regular,pure_instructions
+	.build_version macos, 10, 15	sdk_version 10, 15, 6
+	.globl	_main                   ## -- Begin function main
+	.p2align	4, 0x90
+_main:                                  ## @main
+	.cfi_startproc
+## %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	xorl	%edi, %edi
+	callq	_time
+	testq	%rax, %rax
+	je	LBB0_1
+LBB0_2:
+	leaq	L_.str.1(%rip), %rdi
+	callq	_puts
+	xorl	%eax, %eax
+	popq	%rbp
+	retq
+LBB0_1:
+	leaq	L_.str(%rip), %rdi
+	movl	$1, %esi
+	xorl	%eax, %eax
+	callq	_printf
+	jmp	LBB0_2
+	.cfi_endproc
+                                        ## -- End function
+	.section	__TEXT,__cstring,cstring_literals
+L_.str:                                 ## @.str
+	.asciz	&quot;%d\n&quot;
+
+L_.str.1:                               ## @.str.1
+	.asciz	&quot;a&quot;
+
+.subsections_via_symbols
+
+
+/// clang -emit-llvm -O3 likely_unlikely.c -S
+/// with __builtin_expect
+define i32 @main() local_unnamed_addr #0 {
+  %1 = tail call i64 @time(i64* null) #3
+  %2 = icmp eq i64 %1, 0
+  br i1 %2, label %3, label %5, !prof !4, !misexpect !5  ; used metadata for branch_weights
+  ...
+}
+!4 = !{!&quot;branch_weights&quot;, i32 1, i32 2000}      ; metadata name
+!5 = !{!&quot;misexpect&quot;, i64 1, i64 2000, i64 1}    ; metadata weight
+</code></pre>
 
                     </main>
 

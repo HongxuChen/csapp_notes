@@ -235,6 +235,23 @@ Representation:
 
 ## Floating-Point Code
 
-#### others
-* thanks to branch prediction logic, code based on conditional data transfers can outperform code based on conditional control transfers
+## OTHERS
+* owing to branch prediction logic, code based on conditional data transfers can outperform code based on conditional control transfers
+* C/C++/Rust can facilitate builtin functions/attributes to change the branches.
+  * C/C++: `long __builtin_expect (long exp, long c)`
+  * C++20: `[[likely]]`/`[[likely]]`
+  * Rust(nightly-only): `std::intrinsics::likely`/`std::intrinsics::unlikely`
 
+```C
+/// likely_unlikely.c
+{{#include chapter_03/likely_unlikely.c}}
+
+/// clang -O3 likely_unlikely.c -S
+/// due to __builtin_expect, the order of `_printf` and `_puts` is reversed
+{{#include chapter_03/likely_unlikely.s}}
+
+
+/// clang -emit-llvm -O3 likely_unlikely.c -S
+/// with __builtin_expect
+{{#include chapter_03/likely_unlikely.ll}}
+```
