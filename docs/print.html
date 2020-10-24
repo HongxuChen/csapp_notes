@@ -690,6 +690,87 @@ define i32 @main() local_unnamed_addr #0 {
 !4 = !{!&quot;branch_weights&quot;, i32 1, i32 2000}      ; metadata name
 !5 = !{!&quot;misexpect&quot;, i64 1, i64 2000, i64 1}    ; metadata weight
 </code></pre>
+<h1><a class="header" href="#the-memory-hierarchy" id="the-memory-hierarchy">The Memory Hierarchy</a></h1>
+<h2><a class="header" href="#storage-technologies" id="storage-technologies">Storage Technologies</a></h2>
+<h4><a class="header" href="#sram-vs-dram" id="sram-vs-dram">SRAM vs DRAM</a></h4>
+<pre><code>-----------------------------------------------------------------------------------------------------------------
+     | transitors/bit | access time | persistent | sensitive | cost  |  applications             | size
+-----------------------------------------------------------------------------------------------------------------
+SRAM | 6 (bitstable)  | 1x          | Y          | N         | 1000x |  cache memory             | tens of MBs
+-----------------------------------------------------------------------------------------------------------------
+DRAM | 1 (capacitor)  | 10x         | N          | Y         | 1x    |  main memory/frame buffers| hundreds of MBs
+-----------------------------------------------------------------------------------------------------------------
+</code></pre>
+<h4><a class="header" href="#cpu--bus-interface--system-bus-io-bridge-----memory-bus-main-memory" id="cpu--bus-interface--system-bus-io-bridge-----memory-bus-main-memory">CPU <code>&lt;==&gt;</code> Bus Interface <code>&lt;===&gt;</code> (system bus) I/O bridge <code>&lt;---&gt;</code> (memory bus) main memory</a></h4>
+<ul>
+<li>Steps for <code>movq A, %rax</code> (Bus interface initiates <code>read transaction</code>)
+<ul>
+<li>CPU places address <code>A</code> on system bus</li>
+<li>main memory senses address signal on memory bus -&gt; read <code>A</code> from memory bus -&gt;  fetches data from DRAM =&gt; I/O bridge translates memory bus signal to system bus signal -&gt; passes it along to system bus</li>
+<li>CPU senses data on system bus, reads data from system bus, copies data to <code>%rax</code></li>
+</ul>
+</li>
+<li>Steps for <code>movq %rax,A</code> (Bus interface initiates <code>write transaction</code>)
+<ul>
+<li>CPU places address <code>A</code> on system bus =&gt; memory reads address from memory bus -&gt; waits for data.</li>
+<li>CPU copies data of <code>%rax</code> to system bus</li>
+<li>main memory reads data from memory bus -&gt; store data in DRAM.</li>
+</ul>
+</li>
+</ul>
+<h4><a class="header" href="#mmio-memory-mapped-io" id="mmio-memory-mapped-io">MMIO (memory-mapped I/O)</a></h4>
+<ul>
+<li>each device is mapped to &gt;= 1 I/O ports</li>
+<li>e.g., CPU initiates a disk (port <code>0xa0</code>) read
+<ul>
+<li>1st (store) instruction: sends a command word telling disk to initiate a read, w/o parameters (e.g., whether to interrupt CPU when read finished)</li>
+<li>2nd (store) instruction: indicates logic block number that should be read</li>
+<li>3rd (store) instruction: indicates main memory address where contents of disk sector should be stored</li>
+</ul>
+</li>
+<li>after disk controller receives read command from CPU, DMA is conducted w/o CPU</li>
+</ul>
+<h2><a class="header" href="#locality" id="locality">Locality</a></h2>
+<ul>
+<li>Programs repeatedly referencing same variables -- good <code>temporal locality</code></li>
+<li>strid-k, smaller k, better <code>spatial locality</code></li>
+<li>loops have good <code>temporal</code> and <code>spatial locality</code></li>
+</ul>
+<h2><a class="header" href="#the-memory-hierarchy-1" id="the-memory-hierarchy-1">The Memory Hierarchy</a></h2>
+<ul>
+<li>cold miss/compulsory miss</li>
+<li>conflict miss</li>
+</ul>
+<h2><a class="header" href="#cache-memories" id="cache-memories">Cache Memories</a></h2>
+<ul>
+<li>index with middle bits</li>
+<li>update write-cache copy in next level of memory hierarchy
+<ul>
+<li>write-through (write cache to next lower level)</li>
+<li>write-back (write only when evicted, <code>dirty bits</code>)</li>
+</ul>
+</li>
+<li>deal with write misses
+<ul>
+<li>write-allocate --- write-back</li>
+<li>no-write-allocate --- write-through</li>
+</ul>
+</li>
+<li>cache categories
+<ul>
+<li>i-cache (read-only)</li>
+<li>d-cache</li>
+<li>unified cache</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#writing-cache-friendly-code" id="writing-cache-friendly-code">Writing Cache-Friendly Code</a></h2>
+<ul>
+<li>cache lines, sets, and blocks</li>
+</ul>
+<h2><a class="header" href="#putting-it-together-the-impact-of-caches-on-program-performance" id="putting-it-together-the-impact-of-caches-on-program-performance">Putting it Together: The Impact of Caches on Program Performance</a></h2>
+<p>TODO <a href="chapter_06">chapter_06</a></p>
+<h2><a class="header" href="#summary" id="summary">Summary</a></h2>
 
                     </main>
 
