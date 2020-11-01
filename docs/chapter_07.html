@@ -162,7 +162,114 @@
 
                 <div id="content" class="content">
                     <main>
-                        
+                        <h1><a class="header" href="#linking" id="linking">Linking</a></h1>
+<h2><a class="header" href="#compiler-drivers" id="compiler-drivers">Compiler Drivers</a></h2>
+<p>Workflow</p>
+<ul>
+<li>preprocessing: <code>cpp</code></li>
+<li>compilation: <code>cc1</code></li>
+<li>assembly: <code>as</code></li>
+<li>link: <code>ld</code></li>
+</ul>
+<h2><a class="header" href="#static-linking" id="static-linking">Static Linking</a></h2>
+<ul>
+<li>symbol resolution: function/global variable/static variable</li>
+<li>relocation: <em>blindly</em> relocate using <code>relocation entries</code></li>
+</ul>
+<h2><a class="header" href="#object-files" id="object-files">Object Files</a></h2>
+<ul>
+<li><code>.o</code>: relocatable object file</li>
+<li><code>.out</code>: executable object</li>
+<li><code>.so</code>: shared object</li>
+</ul>
+<h2><a class="header" href="#relocatable-object-files" id="relocatable-object-files">Relocatable Object Files</a></h2>
+<ul>
+<li><code>.text</code>: machine code</li>
+<li><code>.rodata</code>: read-only data</li>
+<li><code>.data</code>: initialized global/static variables</li>
+<li><code>.bss</code>: unintialized or zero-value global/static variables</li>
+<li><code>.symtab</code>: symbol table, <code>-g</code> or relocatable object files</li>
+<li><code>rel.text</code>: relocation entries in <code>.text</code> to be modified (external functions/global variables) during link</li>
+<li><code>rel.data</code>: relocation entries for global variables referenced/defined in this module</li>
+<li><code>.debug</code>: <code>-g</code></li>
+<li><code>.line</code>: line debug mappings, <code>-g</code></li>
+<li><code>.strtab</code>: string table for symbol tables in <code>.symtab</code> and <code>.debug</code></li>
+</ul>
+<h2><a class="header" href="#symbols-and-symbol-tables" id="symbols-and-symbol-tables">Symbols and Symbol Tables</a></h2>
+<ul>
+<li>global liker symbols: defined by this module: nonstatic C functions and global variables</li>
+<li>externals: nonstatic C functions and global variables defined in other modules</li>
+<li>local symbols: static C functions and static global variables (only visiable in this module)</li>
+</ul>
+<h2><a class="header" href="#symbol-resolution" id="symbol-resolution">Symbol Resolution</a></h2>
+<ul>
+<li>global symbols can be weak/strong</li>
+<li>link rules: same name globals &lt;=1 strong; prefer strong; choose any weak</li>
+<li>gcc <code>-fno-common</code> option</li>
+<li>static link only copies needed object inside static library
+<ul>
+<li>place static libraries at the end of command line</li>
+<li>libraries can be repeated</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#relocation" id="relocation">Relocation</a></h2>
+<ul>
+<li>sections and symbol definitions</li>
+<li>symbol references within sections</li>
+<li>relocating:
+<ul>
+<li>PC-Relative References</li>
+<li>Absolute References</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#executable-object-files" id="executable-object-files">Executable Object Files</a></h2>
+<ul>
+<li>no <code>.rel*</code> any more</li>
+<li>starting address <code>vaddr</code>: <code>vaddr mod align = off mod align</code></li>
+</ul>
+<h2><a class="header" href="#loading-executable-object-files" id="loading-executable-object-files">Loading Executable Object Files</a></h2>
+<ul>
+<li>create the memory image during loading (process, virtual memory, memory mapping)</li>
+</ul>
+<h2><a class="header" href="#dynamic-linking-with-shared-libraries" id="dynamic-linking-with-shared-libraries">Dynamic Linking with Shared Libraries</a></h2>
+<ul>
+<li>shared libraries: ONE <code>.so</code> for a particular library; <code>.text</code> of a shared library can be shared by different running processes</li>
+</ul>
+<h2><a class="header" href="#loading-and-linking-shared-libraries-from-applications" id="loading-and-linking-shared-libraries-from-applications">Loading and Linking Shared Libraries from Applications</a></h2>
+<ul>
+<li>linux system:
+<ul>
+<li><code>dlopen</code></li>
+<li><code>RTLD_GLOBAL</code>, <code>RTLD_NOW</code>/<code>RTLD_LAZY</code></li>
+<li><code>dlsym</code></li>
+<li><code>dlclose</code></li>
+<li><code>dlerror</code></li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#position-independent-code-pic" id="position-independent-code-pic">Position-independent Code (PIC)</a></h2>
+<ul>
+<li>PIC: code that can be loaded w/o relocations
+<ul>
+<li>PIC data references
+<ul>
+<li>GOT: beginning of data segment</li>
+</ul>
+</li>
+<li>PIC function calls</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#library-interposition" id="library-interposition">Library Interposition</a></h2>
+<ul>
+<li>compile-time interposition (<code>include headers</code>)</li>
+<li>link-time interposition (<code>-Wl,option</code>)</li>
+<li>run-time interposition (<code>LD_PRELOAD</code>)</li>
+</ul>
+<h2><a class="header" href="#tools-for-manipulating-object-files" id="tools-for-manipulating-object-files">Tools for Manipulating Object Files</a></h2>
+
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

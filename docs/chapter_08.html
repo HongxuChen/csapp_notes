@@ -162,7 +162,90 @@
 
                 <div id="content" class="content">
                     <main>
-                        
+                        <h1><a class="header" href="#exceptional-control-flow" id="exceptional-control-flow">Exceptional Control Flow</a></h1>
+<p>ECF:</p>
+<ul>
+<li>hardware: abrupt control</li>
+<li>operating system: context switch</li>
+<li>application: signal</li>
+</ul>
+<h2><a class="header" href="#exceptions" id="exceptions">Exceptions</a></h2>
+<p>TODO (plantuml to draw sequence)
+After exception handling, these can happen</p>
+<ul>
+<li>handler returns control to current instruction;</li>
+<li>handler returns control to next instruction;</li>
+<li>handler aborts the program.</li>
+</ul>
+<p>classes of exceptions:</p>
+<ul>
+<li>interrupts</li>
+<li>traps &amp; system calls</li>
+<li>faults</li>
+<li>aborts</li>
+</ul>
+<p>Linux/x86-64 faults &amp; aborts</p>
+<ul>
+<li>divide error</li>
+<li>general protection fault</li>
+<li>page fault</li>
+<li>machine check</li>
+</ul>
+<p>Linux/x86-64 system calls</p>
+<pre><code>----------------------------------------------------------------
+Number| Name   | Description
+----------------------------------------------------------------
+0     | read   | read file
+----------------------------------------------------------------
+1     | write  | write file
+----------------------------------------------------------------
+2     | open   | open file
+----------------------------------------------------------------
+3     | close  | close file
+----------------------------------------------------------------
+4     | stat   | get file info
+----------------------------------------------------------------
+9     | mmap   | map memory page to file
+----------------------------------------------------------------
+12    | brk    | reset the top of heap
+----------------------------------------------------------------
+32    | dup2   | copy file descriptor
+----------------------------------------------------------------
+33    | pause  |  suspend process until signal arrives
+----------------------------------------------------------------
+37    | alarm  | schedule delivery of alarm signal
+----------------------------------------------------------------
+39    | getpid | get process ID
+----------------------------------------------------------------
+57    | fork   | create process
+----------------------------------------------------------------
+59    | execve | execute a program
+----------------------------------------------------------------
+60    | _exit  | terminate a process
+----------------------------------------------------------------
+61    | wait4  |  wait for a process to terminate
+----------------------------------------------------------------
+62    | kill   | send signal to process
+----------------------------------------------------------------
+</code></pre>
+<h2><a class="header" href="#processes" id="processes">Processes</a></h2>
+<ul>
+<li>Logical Control Flow</li>
+<li>Concurrent Flow</li>
+<li>private address space</li>
+<li>user and kernel modes</li>
+<li>context switches</li>
+</ul>
+<h2><a class="header" href="#system-call-error-handling" id="system-call-error-handling">System Call Error Handling</a></h2>
+<ul>
+<li><code>errno</code> and <code>strerror</code></li>
+</ul>
+<h2><a class="header" href="#process-control" id="process-control">Process Control</a></h2>
+<ul>
+<li>return code: &lt;=128 vs &gt;128</li>
+<li><code>fork-execve</code> pattern</li>
+</ul>
+
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
