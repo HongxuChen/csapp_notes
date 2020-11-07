@@ -245,6 +245,44 @@ Number| Name   | Description
 <li>return code: &lt;=128 vs &gt;128</li>
 <li><code>fork-execve</code> pattern</li>
 </ul>
+<h2><a class="header" href="#signals" id="signals">Signals</a></h2>
+<ul>
+<li><code>man 3 signal</code> to see the signal lists (used by <code>kill</code>  syscall, <code>man 2 kill</code>)</li>
+<li>signal received ---&gt; signal handled --&gt; return to next instruction</li>
+<li>default sigactions:
+<ul>
+<li>The process terminates.</li>
+<li>The process terminates and dumps core.</li>
+<li>The process stops (suspends) until restarted by a SIGCONT signal.</li>
+<li>The process ignores the signal.</li>
+</ul>
+</li>
+<li><code>sighandler_t signal(int signum, sighandler_t handler)</code> changes the actions:
+<ul>
+<li><code>handler</code> is <code>SIG_IGN</code>, <code>signum</code> ignored</li>
+<li><code>handler</code> is <code>SIG_DFL</code>, <code>signum</code> reverts to default</li>
+<li>otherwise, <code>handler</code> is a user-defined function -- signal handler</li>
+</ul>
+</li>
+<li>implicit blocking signals due to pending</li>
+<li><code>sigprocmask</code> to explicitly block/unblock signals</li>
+<li>writing signal handlers
+<ul>
+<li>keep handlers as simple as possible</li>
+<li>call only async-signal-safe functions</li>
+<li>save and store errno</li>
+<li>protect access to shared global data structures</li>
+<li>declare global variables with <code>volatile</code></li>
+<li>declare flags with <code>sig_atomic_t</code></li>
+</ul>
+</li>
+<li>C++ exceptions are high-level, structured versions of <code>setjmp</code>(try) and <code>longjmp</code>(throw)</li>
+</ul>
+<h2><a class="header" href="#tools-for-manipulating-processes" id="tools-for-manipulating-processes">Tools for Manipulating Processes</a></h2>
+<ul>
+<li>strace/ps/top</li>
+<li><code>/proc</code></li>
+</ul>
 
                     </main>
 

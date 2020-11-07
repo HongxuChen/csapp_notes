@@ -162,7 +162,36 @@
 
                 <div id="content" class="content">
                     <main>
-                        
+                        <h1><a class="header" href="#virtual-memory" id="virtual-memory">Virtual Memory</a></h1>
+<h2><a class="header" href="#address-space" id="address-space">Address Space</a></h2>
+<p>An ordered set of nonnegative integer addresses</p>
+<h2><a class="header" href="#vm-as-a-tool-for-caching" id="vm-as-a-tool-for-caching">VM as a Tool for Caching</a></h2>
+<ul>
+<li><code>virtual pages</code>: fixed size virtual memory
+<ul>
+<li>unallocated: no data associated (do not occupy space on disk)</li>
+<li>cached: allocated &amp; cached in physical memory</li>
+<li>uncached:  alllocated &amp; not cached in physical memory</li>
+</ul>
+</li>
+<li><code>page fault</code>: a DRAM cache miss
+<ul>
+<li>swap/page in</li>
+<li>swap/page out</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#vm-as-a-tool-for-memory-management" id="vm-as-a-tool-for-memory-management">VM as a Tool for Memory Management</a></h2>
+<p>VM simplifies <code>linking</code>, <code>loading</code> and <code>sharing</code></p>
+<ul>
+<li>linking: All processes use the same basic format for the memory images, due to separate address space</li>
+<li>loading: allocate memories for <code>.text</code> and <code>.data</code>. loader does not acutally copy data from disk to memory, but paged in automatically and on-demand the VM the first time each page is referenced. -- <code>mmap</code> (memory mapping)</li>
+<li><code>sharing</code>: e.g., kernal code shared among user-space applications</li>
+<li><code>memory allocation</code>: mallocated memories may be scattered randomly in physical memory</li>
+</ul>
+<h2><a class="header" href="#vm-as-a-tool-for-memory-protection" id="vm-as-a-tool-for-memory-protection">VM as a Tool for Memory Protection</a></h2>
+<p>Providing separate address spaces isolates private memories of different processes.</p>
+
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

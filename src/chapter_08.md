@@ -75,3 +75,31 @@ Number| Name   | Description
 ## Process Control
 * return code: <=128 vs >128
 * `fork-execve` pattern
+
+## Signals
+* `man 3 signal` to see the signal lists (used by `kill`  syscall, `man 2 kill`)
+* signal received ---> signal handled --> return to next instruction
+* default sigactions:
+  * The process terminates.
+  * The process terminates and dumps core.
+  * The process stops (suspends) until restarted by a SIGCONT signal.
+  * The process ignores the signal.
+* `sighandler_t signal(int signum, sighandler_t handler)` changes the actions:
+  * `handler` is `SIG_IGN`, `signum` ignored
+  * `handler` is `SIG_DFL`, `signum` reverts to default
+  * otherwise, `handler` is a user-defined function -- signal handler
+* implicit blocking signals due to pending
+* `sigprocmask` to explicitly block/unblock signals
+* writing signal handlers
+  * keep handlers as simple as possible
+  * call only async-signal-safe functions
+  * save and store errno
+  * protect access to shared global data structures
+  * declare global variables with `volatile`
+  * declare flags with `sig_atomic_t`
+* C++ exceptions are high-level, structured versions of `setjmp`(try) and `longjmp`(throw)
+
+
+## Tools for Manipulating Processes
+* strace/ps/top
+* `/proc`
