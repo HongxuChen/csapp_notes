@@ -1028,6 +1028,104 @@ Number| Name   | Description
 </ul>
 <h2><a class="header" href="#vm-as-a-tool-for-memory-protection" id="vm-as-a-tool-for-memory-protection">VM as a Tool for Memory Protection</a></h2>
 <p>Providing separate address spaces isolates private memories of different processes.</p>
+<h2><a class="header" href="#address-translation" id="address-translation">Address Translation</a></h2>
+<ul>
+<li>\(MAP:VAS\rightarrow PAS\cup\emptyset\), where \(\emptyset\) corresponds to page fault.
+<ul>
+<li>page hit: only hardware</li>
+<li>page fault: hardware + OS</li>
+</ul>
+</li>
+<li>TODO: p9.12 with plantuml</li>
+<li>speed up address translation with TLB (no need L1 cache)</li>
+</ul>
+<h2><a class="header" href="#case-study-the-intel-core-i7linux-memory-system" id="case-study-the-intel-core-i7linux-memory-system">Case Study: The Intel Core i7/Linux Memory System</a></h2>
+<ul>
+<li>PT and the Linux names:
+<ul>
+<li>L1 PT: page global directory</li>
+<li>L2 PT: page upper directory</li>
+<li>L3 PT: page middle directory</li>
+<li>L4 PT: page table</li>
+</ul>
+</li>
+<li>optimizing address translation: overlap 1) translating VA to PA 2) passing PA to L1 cache</li>
+<li>Linux <code>vm_area_struct</code>
+<ul>
+<li><code>vm_start</code></li>
+<li><code>vm_end</code></li>
+<li><code>vm_prot</code>: read/write permissions for all pages in this area</li>
+<li><code>vm_flags</code>: whether the pages in this area are shared with other processes private to this area</li>
+<li><code>vm_next</code>: next area struct in the list</li>
+</ul>
+</li>
+<li>When MMU triggers a page fault while trying to translate virtual address \(A\) in Linux
+<ul>
+<li>check whether \(A\) is illegal (<code>vm_area_struct</code>); segfault if illegal</li>
+<li>check whether the process has the permission to read/write/execute the page in this area</li>
+<li>swap out a victim page and replace</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#memory-mapping" id="memory-mapping">Memory Mapping</a></h2>
+<ul>
+<li>Linux area can be mapped to 2 types of files
+<ul>
+<li>regular file (demand paging)</li>
+<li>anonymous file (demand-zero pages)</li>
+</ul>
+</li>
+<li>shared area vs private area</li>
+<li><code>fork</code> -- copy-on-write</li>
+<li><code>execve</code>
+<ul>
+<li>delete existing user areas</li>
+<li>map private areas</li>
+<li>map shared areas</li>
+<li>set PC</li>
+</ul>
+</li>
+<li><code>void *mmap(void *start, size_t length, int prot, int flags, int fd, off_t offset)</code></li>
+</ul>
+<h2><a class="header" href="#dynamic-memory-allocation" id="dynamic-memory-allocation">Dynamic Memory Allocation</a></h2>
+<ul>
+<li>Allocation
+<ul>
+<li>Explicit allocation (<code>malloc</code>, <code>calloc</code>, <code>realloc</code>)</li>
+<li>Implicit allocation (GC)</li>
+</ul>
+</li>
+</ul>
+<p>Implementation Issues:</p>
+<ul>
+<li>Free Blocks: implicit free list (linked implicitly by size fields in the headers)</li>
+<li>Placing Allocated Blocks
+<ul>
+<li>first fit</li>
+<li>next fit</li>
+<li>best fit</li>
+</ul>
+</li>
+<li>Splitting Free Blocks</li>
+<li>Coalescing Free Blocks (combat false fragmentation)</li>
+</ul>
+<h2><a class="header" href="#garbage-collection" id="garbage-collection">Garbage Collection</a></h2>
+<ul>
+<li><code>directed reachability graph</code></li>
+</ul>
+<h2><a class="header" href="#common-memory-related-bugs-in-c-programs" id="common-memory-related-bugs-in-c-programs">Common Memory-Related Bugs in C Programs</a></h2>
+<ul>
+<li>Dereferencing Bad Pointers</li>
+<li>Reading Uninitialized Memory</li>
+<li>Allowing Stack Buffer Overflows</li>
+<li>Assuming That Pointers and the Objects They Point to Are the Same Size</li>
+<li>Making Off-by-One Errors</li>
+<li>Referencing a Pointer Instead of the Object It Points To</li>
+<li>Misunderstanding Pointer Arithmetic</li>
+<li>Referencing Nonexistent Variables</li>
+<li>Referencing Data in Free Heap Blocks</li>
+<li>Introducing Memory Leaks</li>
+</ul>
 
                     </main>
 
